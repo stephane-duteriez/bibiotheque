@@ -24,6 +24,14 @@
 		.resultat {
 			margin-top: 1em;
 		}
+		.row.is-flex {
+    display: flex;
+    flex-wrap: wrap;
+}
+.row.is-flex > [class*='col-'] {
+    display: flex;
+    flex-direction: column;
+}
 	</style>
 </head>
 <body>
