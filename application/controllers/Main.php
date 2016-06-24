@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Main extends CI_Controller {
+class Main extends MY_Controller {
 
 	public function __construct()
     {
@@ -11,6 +11,8 @@ class Main extends CI_Controller {
 
 	public function liste_tout()
 	{
+			$this->is_logged_in();
+
             $this->load->model('Livre_model');
             $livres=$this->Livre_model->get();
 			$data['livres']="";
