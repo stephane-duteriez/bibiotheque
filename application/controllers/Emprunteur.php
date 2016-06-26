@@ -15,6 +15,8 @@ class Emprunteur extends MY_Controller {
 			$this->load->library('form_validation');
 			$this->load->model('Emprunteur_model');
 
+			$this->is_logged_in();
+			
 			$config = array(
 				array(
 					'field' => 'nom',

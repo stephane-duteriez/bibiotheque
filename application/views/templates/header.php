@@ -54,5 +54,15 @@
 		    <li><a href="/emprunteur/form">Emprunteur</a></li>
 		  </ul>
 		</li>
+		<li>
+		<?php 
+			$link_protocol = USE_SSL ? 'https' : NULL;
+			if( isset($auth_user_id) )
+				{
+				    echo anchor( site_url('user_admin/logout', $link_protocol ),'se deconnecter');;
+				} else {
+					 echo anchor( site_url(LOGIN_PAGE . '?redirect=main', $link_protocol ),'se connecter','id="login-link"');
+				}?> 
+		</li>	
 	</ul>
 </nav>

@@ -15,6 +15,8 @@ class Exemplaire extends MY_Controller {
 			$this->load->library('form_validation');
 			$this->load->model('Exemplaire_model');
 
+			$this->is_logged_in();
+			
 			$config = array(
 				array(
 					'field' => 'reference',

@@ -13,7 +13,7 @@ class User_admin extends MY_Controller {
         public function login()
         {
                 // Method should not be directly accessible
-                if( $this->uri->uri_string() == 'bapteme/login')
+                if( $this->uri->uri_string() == 'User_admin/login')
                     show_404();
 
                 if( strtolower( $_SERVER['REQUEST_METHOD'] ) == 'post' )

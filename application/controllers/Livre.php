@@ -17,6 +17,8 @@ class Livre extends MY_Controller {
 			$this->load->model('Auteur_model');
 			$this->load->model('Categorie_model');
 
+			$this->is_logged_in();
+			
 			$config = array(
 				array(
 					'field' => 'titre',

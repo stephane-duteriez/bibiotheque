@@ -10,6 +10,7 @@ class MY_Controller extends Auth_Controller {
 	public function __construct()
 	{
 		parent::__construct();
+		$this->is_logged_in();
 	}
 	
 	public function bt_submit()

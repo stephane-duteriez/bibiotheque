@@ -51,6 +51,7 @@ class Main extends MY_Controller {
 
 	public function index()
 	{
+			$this->is_logged_in();
 			$this->load->view('templates/header');
 			$this->load->view('chercher');
 			$this->load->view('templates/footer');

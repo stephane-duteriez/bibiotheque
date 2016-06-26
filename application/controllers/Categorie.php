@@ -15,6 +15,8 @@ class Categorie extends MY_Controller {
 			$this->load->library('form_validation');
 			$this->load->model('Categorie_model');
 
+			$this->is_logged_in();
+			
 			$config = array(
 				array(
 					'field' => 'intitule',
