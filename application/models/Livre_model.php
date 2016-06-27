@@ -1,22 +1,23 @@
 <?php
-class Livre_model extends CI_Model {
+class Livre_model extends MY_Model {
 
         public function __construct()
         {
                 $this->load->database();
                 $this->table = 'LIVRE';
                 $this->id='id_livre';
+                $this->ref='ref_livre';
         }
 
-        public function get($id=NULL)
+        public function get($ref=NULL)
         {
-                if ($id)
+                if ($ref)
                 {
                         $this->db->select($this->table . '.*, AUTEUR.nom, AUTEUR.prenom, APPARTIENT.id_categorie');
                         $this->db->from($this->table);
                         $this->db->join('AUTEUR', 'LIVRE.id_auteur' . '=' . 'AUTEUR.id_auteur', 'inner');
                         $this->db->join('APPARTIENT', 'APPARTIENT.id_livre=LIVRE.id_livre', 'left');
-                        $this->db->where('LIVRE.'.$this->id, $id);
+                        $this->db->where('LIVRE.'.$this->ref, $ref);
                         $query=$this->db->get();
                         return $query->row();
                 } else
@@ -45,18 +46,21 @@ class Livre_model extends CI_Model {
 
         public function set($data, $categorie)
         {       
-                if (isset($data[$this->id]))
+                if (isset($data[$this->ref]))
                 {
-                        $this->db->update_batch($this->table, array($data), $this->id);
-                        $insert_id=$data[$this->id];
+                        // update the book and get the id of the book.
+                        $this->db->update_batch($this->table, array($data), $this->ref);
+                        $insert_id=$this->db->get_where($this->table, array($this->ref=>$data[$this->ref]))->row()->id_livre;
+
+                        // change the categorie of the book.
                         $this->db->select('*');
                         $this->db->from('APPARTIENT');
-                        $this->db->where($this->id, $data[$this->id]);
+                        $this->db->where($this->id, $insert_id);
                         $query=$this->db->get();
                         if ($query->num_rows())
                         {
                                 $this->db->set('id_categorie', $categorie);
-                                $this->db->where($this->id, $data[$this->id]);
+                                $this->db->where($this->id, $insert_id);
                                 $this->db->update('APPARTIENT');
                         } else
                         {
@@ -66,9 +70,13 @@ class Livre_model extends CI_Model {
                                 ));
                         }
                 } else
-                {
+                {       
+                        // there is no reference so we creat a new book.
+                        $data[$this->ref]=$this->get_new_ref();
                         $this->db->insert($this->table, $data);
                         $insert_id=$this->db->insert_id();
+
+                        // update the table that link with a categorie.
                         $this->db->insert('APPARTIENT', array(
                                 'id_categorie'=>$categorie,
                                 'id_livre'=>$insert_id
@@ -76,16 +84,24 @@ class Livre_model extends CI_Model {
                 }
         }
 
-        public function delete($id)
+        public function delete($ref)
         {
-                $query = $this->db->get_where('EXEMPLAIRE', array($this->id=>$id));
+                $this->db->select('*');
+                $this->db->from($this->table);
+                $this->db->join('EXEMPLAIRE', 'EXEMPLAIRE.'.$this->id . '=' . $this->table . '.' . $this->id);
+                $this->db->where($this->ref, $ref);
+                $query=$this->db->get();
                 if ($query->num_rows())
                 {
                         redirect('livre/error/supprime/'.$id);
                 } else
                 {
-                        $this->db->delete('APPARTIENT', array($this->id=>$id));
-                        $this->db->delete($this->table, array($this->id=>$id));
+                        $id_livre=$this->db->get_where($this->table, array($this->ref=>$ref))->row()->id_livre;
+                        if (isset($id_livre))
+                        {
+                                $this->db->delete('APPARTIENT', array($this->id=>$id_livre));
+                                $this->db->delete($this->table, array($this->id=>$id_livre));                                
+                        }
                 }
         }
 

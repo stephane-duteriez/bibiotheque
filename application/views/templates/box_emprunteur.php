@@ -1,8 +1,8 @@
 <div class="col-md-3" >
 	<div class="panel panel-default">
 		 <div class="panel-heading">
-		    <h3 class="panel-title" style="cursor: pointer;" onclick="window.location='<?php echo base_url('/emprunteur/form/'. $id_emprunteur);?>';"><?php echo $nom. ' '. $prenom;?></h3>
-		    <div type="button" class="btn btn-danger vertical-center" style="cursor: pointer;" onclick="window.location='<?php echo base_url('/emprunteur/delete/'. $id_emprunteur);?>';">
+		    <h3 class="panel-title" style="cursor: pointer;" onclick="window.location='<?php echo base_url('/emprunteur/form/'. $ref_emprunteur);?>';"><?php echo $nom. ' '. $prenom;?></h3>
+		    <div type="button" class="btn btn-danger vertical-center" style="cursor: pointer;" onclick="window.location='<?php echo base_url('/emprunteur/delete/'. $ref_emprunteur);?>';">
 					  	<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
 			</div>
 		</div>

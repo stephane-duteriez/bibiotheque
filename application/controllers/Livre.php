@@ -9,7 +9,7 @@ class Livre extends MY_Controller {
             $this->load->helper('url_helper');
     }
 
-    public function form($id=NULL)
+    public function form($ref=NULL)
 	{
 			$this->load->helper(array('form','url'));
 			$this->load->library('form_validation');
@@ -29,15 +29,15 @@ class Livre extends MY_Controller {
 
 			$this->form_validation->set_rules($config);
 
-			if ($id)
+			if ($ref)
 			{
-				$livre=$this->Livre_model->get($id);
+				$livre=$this->Livre_model->get($ref);
 			} 
 			
 			if ($this->form_validation->run()==FALSE)
 			{
 				$data['titre']='formulaire livre';
-				$data['hidden']=array('id_livre'=>$id);
+				$data['hidden']=array('ref_livre'=>$ref);
 				$data['inputs']=array();
 
 				array_push($data['inputs'], $this->input_field('titre', isset($livre)?$livre:NULL));
@@ -66,20 +66,20 @@ class Livre extends MY_Controller {
 					'publication'=>$this->input->post('publication'),
 					'id_auteur'=>$this->input->post('id_auteur')
 					);
-				if (isset($id)) $livre['id_livre']=$id;
+				if (isset($ref)) $livre['ref_livre']=$ref;
 				$categorie=$this->input->post('id_categorie');
 				$this->Livre_model->set($livre, $categorie);
 				redirect('/');
 			}
 
 	}
-	public function delete($id=NULL)
+	public function delete($ref=NULL)
 	{
 			$this->load->model('Livre_model');
 
-			if (isset($id))
+			if (isset($ref))
 			{
-				$this->Livre_model->delete($id);
+				$this->Livre_model->delete($ref);
 				redirect('/');
 			} 
 			
@@ -91,15 +91,15 @@ class Livre extends MY_Controller {
 				$this->load->view('templates/footer');
 	}
 
-	public function afficher($id)
+	public function afficher($ref)
 	{
 			$this->load->model('Livre_model');
 
-			$data['livre']=$this->Livre_model->get($id);
+			$data['livre']=$this->Livre_model->get($ref);
 			if ($data['livre'])
 			{
 				$this->load->model('Exemplaire_model');
-				$data['list_exemplaire']=$this->Exemplaire_model->from_livre($id);
+				$data['list_exemplaire']=$this->Exemplaire_model->from_livre($data['livre']->id_livre);
 				
 				$this->load->view('templates/header');
 				$this->load->view('afficher_livre', $data);

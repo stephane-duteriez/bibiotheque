@@ -1,5 +1,5 @@
 <?php
-class Auteur_model extends CI_Model {
+class Auteur_model extends MY_Model {
 
         public function __construct()
         {
@@ -47,6 +47,7 @@ class Auteur_model extends CI_Model {
                         $this->db->update_batch($this->table, array($data), $this->id);
                 } else
                 {
+                        $data[$this->ref]=$this->get_new_ref();
                         $this->db->insert($this->table, $data);
                 }
         }

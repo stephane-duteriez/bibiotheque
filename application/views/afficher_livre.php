@@ -21,7 +21,7 @@
 			  </div>
 			  <div class="panel-body row">
 			    <div class="col-sm-offset-5 col-sm-2">
-			      <button class="btn btn-default" onclick="window.location='<?php echo base_url('/livre/form/'.$livre->id_livre);?>';" id="valider">Modifier</button>
+			      <button class="btn btn-default" onclick="window.location='<?php echo base_url('/livre/form/'.$livre->ref_livre);?>';" id="valider">Modifier</button>
 			    </div>
 		  	</div>	
 			</div>
@@ -31,10 +31,10 @@
 
 			<div class="panel panel-default">
 				<div class="panel-heading">
-				  	<button type="button" class="btn btn-danger pull-right" aria-label="Left Align" style="cursor: pointer;" onclick="window.location='<?php echo base_url('/exemplaire/delete/'.$exemplaire['id_exemplaire']);?>';">
+				  	<button type="button" class="btn btn-danger pull-right" aria-label="Left Align" style="cursor: pointer;" onclick="window.location='<?php echo base_url('/exemplaire/delete/'.$exemplaire['ref_exemplaire']);?>';">
 					  	<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
 					</button>
-				  <div class="row" style="cursor: pointer;" onclick="window.location='<?php echo base_url('/exemplaire/form/'.$exemplaire['id_exemplaire']);?>';">
+				  <div class="row" style="cursor: pointer;" onclick="window.location='<?php echo base_url('/exemplaire/form/'.$exemplaire['ref_exemplaire']);?>';">
 			  		<div class="col-sm-6"><p>Reference :</p></div>
 				  	<div class="col-sm-4"><p><?php echo $exemplaire['reference']; ?></p></div>
 				  </div>
@@ -54,7 +54,7 @@
 			<?php endforeach; ?>
 			<div class="panel-body row">
 			    <div class="col-sm-offset-5 col-sm-2">
-			      <button class="btn btn-default" onclick="window.location='<?php echo base_url('/exemplaire/form?livre_id='.$livre->id_livre);?>';" id="valider">Ajouter</button>
+			      <button class="btn btn-default" onclick="window.location='<?php echo base_url('/exemplaire/form?ref_livre='.$livre->ref_livre);?>';" id="valider">Ajouter</button>
 			    </div>
 		  	</div>	
 		</div>

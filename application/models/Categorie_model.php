@@ -1,20 +1,21 @@
 <?php
-class Categorie_model extends CI_Model {
+class Categorie_model extends MY_Model {
 
         public function __construct()
         {
                 $this->load->database();
                 $this->table = 'CATEGORIE';
                 $this->id='id_categorie';
+                $this->ref='ref_categorie';
         }
 
-        public function get($id=NULL)
+        public function get($ref=NULL)
         {
-                if ($id)
+                if ($ref)
                 {
                         $this->db->select('*');
                         $this->db->from($this->table);
-                        $this->db->where($this->id, $id);
+                        $this->db->where($this->ref, $ref);
                         $query=$this->db->get();
                         return $query->row();
                 } else
@@ -41,24 +42,26 @@ class Categorie_model extends CI_Model {
         }
         public function set($data)
         {       
-                if (isset($data[$this->id]))
+                if (isset($data[$this->ref]))
                 {
-                        $this->db->update_batch($this->table, array($data), $this->id);
+                        $this->db->update_batch($this->table, array($data), $this->ref);
                 } else
                 {
+                        $data[$this->ref]=$this->get_new_ref();
                         $this->db->insert($this->table, $data);
                 }
         }
 
-        public function delete($id)
+        public function delete($ref)
         {
-                $query = $this->db->get_where('APPARTIENT', array($this->id=>$id));
+                $id_categorie = $this->db->get_where($this->table, array($this->ref=>$ref))->row()->id_categorie;
+                $query = $this->db->get_where('APPARTIENT', array($this->id=>$id_categorie));
                 if ($query->num_rows())
                 {
-                        redirect('auteur/error/supprime/'.$id);
+                        redirect('auteur/error/supprime/'.$ref);
                 } else
                 {
-                        $this->db->delete($this->table, array($this->id=>$id));
+                        $this->db->delete($this->table, array($this->ref=>$ref));
                 }
         }
 }

@@ -9,7 +9,7 @@ class Editeur extends MY_Controller {
             $this->load->helper('url_helper');
     }
 
-    public function form($id_editeur=NULL)
+    public function form($ref_editeur=NULL)
 	{
 			$this->load->helper(array('form','url'));
 			$this->load->library('form_validation');
@@ -26,15 +26,15 @@ class Editeur extends MY_Controller {
 
 			$this->form_validation->set_rules($config);
 
-			if ($id_editeur)
+			if ($ref_editeur)
 			{
-				$editeur=$this->Editeur_model->get($id_editeur);
+				$editeur=$this->Editeur_model->get($ref_editeur);
 			} 
 			
 			if ($this->form_validation->run()==FALSE)
 			{
 				$data['titre']='fromulaire éditeur';
-				$data['hidden']=array('id_editeur'=>$id_editeur);
+				$data['hidden']=array('ref_editeur'=>$ref_editeur);
 				$data['inputs']=array();
 
 				array_push($data['inputs'], $this->input_field('intitule', isset($editeur)?$editeur:NULL));
@@ -49,7 +49,7 @@ class Editeur extends MY_Controller {
 				$editeur=array(
 					'intitule'=>$this->input->post('intitule')
 					);
-				if (isset($id_editeur)) $editeur['id_editeur']=$id_editeur;
+				if (isset($ref_editeur)) $editeur['ref_editeur']=$ref_editeur;
 				$this->Editeur_model->set($editeur);
 				redirect('/');
 			}

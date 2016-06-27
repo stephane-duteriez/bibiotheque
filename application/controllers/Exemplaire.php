@@ -9,7 +9,7 @@ class Exemplaire extends MY_Controller {
             $this->load->helper('url_helper');
     }
 
-    public function form($id=NULL)
+    public function form($ref=NULL)
 	{
 			$this->load->helper(array('form','url'));
 			$this->load->library('form_validation');
@@ -26,11 +26,11 @@ class Exemplaire extends MY_Controller {
 
 			$this->form_validation->set_rules($config);
 
-			$id_livre = $this->input->get('id_livre');
+			$ref_livre = $this->input->get('ref_livre');
 
-			if ($id)
+			if ($ref)
 			{
-				$exemplaire=$this->Exemplaire_model->get($id);
+				$exemplaire=$this->Exemplaire_model->get($ref);
 			} 
 			
 			if ($this->form_validation->run()==FALSE)
@@ -40,12 +40,13 @@ class Exemplaire extends MY_Controller {
 				$this->load->model('Exemplaire_model');
 
 				$data['titre']='formulaire Exemplaire';
-				$data['hidden']=array('id_exemplaire'=>$id);
+				$data['hidden']=array('ref_exemplaire'=>$ref);
 				$data['inputs']=array();
 
 				array_push($data['inputs'], $this->input_field('reference', isset($exemplaire)?$exemplaire:NULL));
 				$list_livre = $this->Livre_model->get_array();
-				array_push($data['inputs'], $this->select_field('id_livre', 'Livre', $list_livre, isset($exemplaire)?$exemplaire:($this->input->get('livre_id'))?(object) array('id_livre'=>$this->input->get('livre_id')):NULL));
+				$livre =  $this->Livre_model->get($ref_livre);
+				array_push($data['inputs'], $this->select_field('id_livre', 'Livre', $list_livre, isset($exemplaire)?$exemplaire:((isset($livre))?(object) array('id_livre'=>$livre->id_livre):NULL)));
 				$list_editeur = $this->Editeur_model->get_array();
 				array_push($data['inputs'], $this->select_field('id_editeur', 'Editeur', $list_editeur, isset($exemplaire)?$exemplaire:NULL));
 
@@ -61,19 +62,19 @@ class Exemplaire extends MY_Controller {
 					'reference'=>$this->input->post('reference'),
 					'id_livre'=>$this->input->post('id_livre')
 					);
-				if (isset($id)) $exemplaire['id_exemplaire']=$id;
+				if (isset($ref)) $exemplaire['ref_exemplaire']=$ref;
 				$this->Exemplaire_model->set($exemplaire, $this->input->post('id_editeur'));
 				redirect('/');
 			}
 
 	}
-	public function delete($id=NULL)
+	public function delete($ref=NULL)
 	{
 			$this->load->model('Exemplaire_model');
 
-			if (isset($id))
+			if (isset($ref))
 			{
-				$this->Exemplaire_model->delete($id);
+				$this->Exemplaire_model->delete($ref);
 				redirect('/');
 			} 
 			

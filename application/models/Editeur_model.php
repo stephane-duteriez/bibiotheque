@@ -1,20 +1,21 @@
 <?php
-class Editeur_model extends CI_Model {
+class Editeur_model extends MY_Model {
 
         public function __construct()
         {
                 $this->load->database();
                 $this->table = 'EDITEUR';
                 $this->id='id_editeur';
+                $this->ref='ref_editeur';
         }
 
-        public function get($id_editeur=NULL)
+        public function get($ref_editeur=NULL)
         {
-                        if ($id_editeur)
+                        if ($ref_editeur)
                         {
                                 $this->db->select('*');
                                 $this->db->from('EDITEUR');
-                                $this->db->where('id_editeur', $id_editeur);
+                                $this->db->where('ref_editeur', $ref_editeur);
                                 $query=$this->db->get();
                                 return $query->row();
                         } else
@@ -28,17 +29,19 @@ class Editeur_model extends CI_Model {
 
         public function set($editeur)
         {       
-                if (isset($editeur['id_editeur']))
+                if (isset($editeur['ref_editeur']))
                 {
-                        $this->db->update_batch('EDITEUR', array($editeur), 'id_editeur');
+                        $this->db->update_batch('EDITEUR', array($editeur), 'ref_editeur');
                 } else
                 {
+                        $editeur[$this->ref]=$this->get_new_ref();
                         $this->db->insert('EDITEUR', $editeur);
                 }
         }
 
-        public function delete($id_editeur)
+        public function delete($ref_editeur)
         {
+                $id_editeur = $this->db->get_where('EDITEUR', array($this->ref=>$ref_editeur))->row()->id_editeur;
                 $query = $this->db->get_where('EDITE', array('id_editeur'=>$id_editeur));
                 if ($query->num_rows())
                 {

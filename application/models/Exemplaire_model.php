@@ -1,21 +1,22 @@
 <?php
-class Exemplaire_model extends CI_Model {
+class Exemplaire_model extends MY_Model {
 
         public function __construct()
         {
                 $this->load->database();
                 $this->table = 'EXEMPLAIRE';
                 $this->id='id_exemplaire';
+                $this->ref='ref_exemplaire';
         }
 
-        public function get($id=NULL)
+        public function get($ref=NULL)
         {
-                if ($id)
+                if ($ref)
                 {
                         $this->db->select('*');
                         $this->db->from($this->table);
                         $this->db->join('EDITE', 'EDITE.id_exemplaire=EXEMPLAIRE.id_exemplaire', 'inner');
-                        $this->db->where('EXEMPLAIRE.'.$this->id, $id);
+                        $this->db->where('EXEMPLAIRE.'.$this->ref, $ref);
                         $query=$this->db->get();
                         return $query->row();
                 } else
@@ -54,15 +55,20 @@ class Exemplaire_model extends CI_Model {
 
         public function set($data, $id_editeur)
         {       
-                if (isset($data[$this->id]))
+                if (isset($data[$this->ref]))
                 {
-                        $this->db->update_batch($this->table, array($data), $this->id);
-                        $insert_id=$data[$this->id];
+                        // update the entity and get the id. 
+                        $this->db->update_batch($this->table, array($data), $this->ref);
+                        $insert_id=$this->db->get_where($this->table, array($this->ref=>$data[$this->ref]))->row()->id_exemplaire;
+
+                        // update the table editeur.
                         $this->db->set('id_editeur', $id_editeur);
-                        $this->db->where($this->id, $data[$this->id]);
+                        $this->db->where($this->id, $insert_id);
                         $this->db->update('EDITE');
                 } else
                 {
+                        // creat a new entity exemplaire.
+                        $data[$this->ref]=$this->get_new_ref();
                         $this->db->insert($this->table, $data);
                         $insert_id=$this->db->insert_id();
                         $this->db->insert('EDITE', array(
@@ -72,16 +78,17 @@ class Exemplaire_model extends CI_Model {
                 }
         }
 
-        public function delete($id)
+        public function delete($ref)
         {
-                $query = $this->db->get_where('EMPRUNTE', array($this->id=>$id));
+                $id_exemplaire = $this->db->get_where($this->table, array($this->ref=>$ref))->row()->id_exemplaire;
+                $query = $this->db->get_where('EMPRUNTE', array($this->id=>$id_exemplaire));
                 if ($query->num_rows())
                 {
-                        redirect('auteur/error/supprime/'.$id);
+                        redirect('exemplaire/error/supprime/'.$ref);
                 } else
                 {
-                        $this->db->delete('EDITE', array($this->id=>$id));
-                        $this->db->delete($this->table, array($this->id=>$id));
+                        $this->db->delete('EDITE', array($this->id=>$id_exemplaire));
+                        $this->db->delete($this->table, array($this->ref=>$ref));
                 }
         }
 
