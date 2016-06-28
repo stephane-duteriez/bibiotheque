@@ -124,4 +124,20 @@ class Livre_model extends MY_Model {
                 $query=$this->db->get();
                 return $query->result_array();
         }
+
+        public function seek_adv($option)
+        // recherche de livre avance $option est un tableau de recherche.
+        {
+               $this->db->select($this->table . '.*, AUTEUR.nom, AUTEUR.prenom, CATEGORIE.intitule');
+                $this->db->from($this->table);
+                $this->db->join('AUTEUR', 'LIVRE.id_auteur' . '=' . 'AUTEUR.id_auteur', 'inner');
+                $this->db->join('APPARTIENT', 'APPARTIENT.id_livre=LIVRE.id_livre', 'left');
+                $this->db->join('CATEGORIE', 'APPARTIENT.id_categorie=CATEGORIE.id_categorie');
+                if (isset($option[1])) $this->db->like('LIVRE.titre', $option[1]);
+                if (isset($option[2])) $this->db->like('LIVRE.resume', $option[2]);
+                if (isset($option[4])) $this->db->like('AUTEUR.nom', $option[4]);
+                if (isset($option[8])) $this->db->like('LIVRE.serie', $option[8]);
+                $query=$this->db->get();
+                return $query->result_array(); 
+        }
 }

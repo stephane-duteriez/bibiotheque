@@ -153,17 +153,33 @@ class Livre extends MY_Controller {
 			}
 	}
 
-	public function seek($indice, $option)
+	public function seek($indice=NULL, $option=NULL)
 	{
 			$this->load->model('Livre_model');
-			if (strlen($indice) > 3&& isset($option) && $option!=0)
+			if (isset($indice)&&isset($option))
 			{
-				$list_livre=$this->Livre_model->seek($indice, $option);
+				if (strlen($indice) > 3&& isset($option) && $option!=0)
+				{
+					$list_livre=$this->Livre_model->seek($indice, $option);
+				}
+			} else
+			{
+				$option = array (
+					1=>$this->input->get('1'),
+					2=>$this->input->get('2'),
+					4=>$this->input->get('4'),
+					8=>$this->input->get('8')
+					);
+				$list_livre=$this->Livre_model->seek_adv($option);
+			}
+
+			if (isset($list_livre))
+			{
 				$sortie="";
 				foreach ($list_livre as $livre) {
 					$sortie .= $this->load->view('templates/box_livre', $livre, True);
 				}
-				echo $sortie;
+				echo $sortie;				
 			} else 
 			{
 				echo 'error';
