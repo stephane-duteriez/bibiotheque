@@ -63,8 +63,8 @@ class Exemplaire extends MY_Controller {
 					'id_livre'=>$this->input->post('id_livre')
 					);
 				if (isset($ref)) $exemplaire['ref_exemplaire']=$ref;
-				$this->Exemplaire_model->set($exemplaire, $this->input->post('id_editeur'));
-				redirect('/');
+				$ref_livre = $this->Exemplaire_model->set($exemplaire, $this->input->post('id_editeur'));
+				redirect('/livre/afficher/' . $ref_livre);
 			}
 
 	}
@@ -74,8 +74,8 @@ class Exemplaire extends MY_Controller {
 
 			if (isset($ref))
 			{
-				$this->Exemplaire_model->delete($ref);
-				redirect('/');
+				$ref_livre=$this->Exemplaire_model->delete($ref);
+				redirect('/livre/afficher/'.$ref_livre);
 			} 
 			
 	}

@@ -76,11 +76,18 @@ class Exemplaire_model extends MY_Model {
                                 'id_exemplaire'=>$insert_id
                                 ));
                 }
+                $ref_livre=$this->db->get_where('LIVRE', array('id_livre'=>$data['id_livre']))->row()->ref_livre;
+                return $ref_livre;
         }
 
         public function delete($ref)
         {
-                $id_exemplaire = $this->db->get_where($this->table, array($this->ref=>$ref))->row()->id_exemplaire;
+                $exemplaire=$this->db->get_where($this->table, array($this->ref=>$ref))->row();
+
+                $ref_livre=$this->db->get_where('LIVRE', array('id_livre'=>$exemplaire->id_livre))->row()->ref_livre;
+                $id_exemplaire = $exemplaire->id_exemplaire;
+
+
                 $query = $this->db->get_where('EMPRUNTE', array($this->id=>$id_exemplaire));
                 if ($query->num_rows())
                 {
@@ -89,6 +96,7 @@ class Exemplaire_model extends MY_Model {
                 {
                         $this->db->delete('EDITE', array($this->id=>$id_exemplaire));
                         $this->db->delete($this->table, array($this->ref=>$ref));
+                        return $ref_livre;
                 }
         }
 

@@ -73,10 +73,11 @@ class Auteur extends MY_Controller {
 					);
 				if (isset($id)) $auteur['id_auteur']=$id;
 				$this->Auteur_model->set($auteur);
-				redirect('/');
+				redirect('/auteur/liste');
 			}
 
 	}
+
 	public function delete($id=NULL)
 	{
 			$this->load->model('Auteur_model');
@@ -84,15 +85,32 @@ class Auteur extends MY_Controller {
 			if (isset($id))
 			{
 				$this->Auteur_model->delete($id);
-				redirect('/');
+				redirect('/auteur/liste');
 			} 
 			echo 'il n\'y a pas d\'auteur avec cette id.';
 			
 	}
+
 	public function error($id_editeur=NULL)
 	{
 				$this->load->view('templates/header');
 				$this->load->view('templates/error');
 				$this->load->view('templates/footer');
+	}
+
+	public function liste()
+	{
+		$this->is_logged_in();
+		$data['liste']='';
+        $this->load->model('Auteur_model');
+		$auteurs=$this->Auteur_model->get();
+		foreach ($auteurs as $auteur) {
+			$data['liste'] .= $this->load->view('templates/box_auteur', $auteur, True);
+		}
+		$data['title']='Auteur';
+		$this->load->view('templates/header');
+		$this->load->view('templates/liste', $data);
+		$this->load->view('templates/footer');
+
 	}
 }

@@ -121,7 +121,7 @@ class Livre extends MY_Controller {
 			if (isset($ref))
 			{
 				$this->Livre_model->delete($ref);
-				redirect('/');
+				redirect('/livre/liste');
 			} 
 			
 	}
@@ -168,5 +168,22 @@ class Livre extends MY_Controller {
 			{
 				echo 'error';
 			}
+	}
+
+	public function liste()
+	{
+		$this->is_logged_in();
+
+        $this->load->model('Livre_model');
+        $livres=$this->Livre_model->get();
+		$data['liste']="";
+		foreach ($livres as $livre) {
+			$data['liste'] .= $this->load->view('templates/box_livre', $livre, True);
+		}
+		$data['title']='Livre';
+		$this->load->view('templates/header');
+		$this->load->view('templates/liste', $data);
+		$this->load->view('templates/footer');
+
 	}
 }

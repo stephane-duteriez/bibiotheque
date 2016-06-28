@@ -19,3 +19,4 @@
 	<div class="row">		
 	<?php echo $emprunteurs ;?>
 	</div>
+</div>

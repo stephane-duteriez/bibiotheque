@@ -114,4 +114,20 @@ class Emprunteur extends MY_Controller {
 			echo 'erreur.';
 		}
 	}
+
+	public function liste()
+	{
+		$this->is_logged_in();
+		$data['liste']='';
+		$this->load->model('Emprunteur_model');
+		$emprunteurs=$this->Emprunteur_model->get();
+		foreach ($emprunteurs as $emprunteur) {	
+			$data['liste'] .= $this->load->view('templates/box_emprunteur', $emprunteur, True);
+		}
+		$data['title']='Emprunteurs';
+		$this->load->view('templates/header');
+		$this->load->view('templates/liste', $data);
+		$this->load->view('templates/footer');
+
+	}
 }

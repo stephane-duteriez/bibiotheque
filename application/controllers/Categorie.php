@@ -9,7 +9,7 @@ class Categorie extends MY_Controller {
             $this->load->helper('url_helper');
     }
 
-    public function form($id=NULL)
+    public function form($ref=NULL)
 	{
 			$this->load->helper(array('form','url'));
 			$this->load->library('form_validation');
@@ -26,15 +26,15 @@ class Categorie extends MY_Controller {
 
 			$this->form_validation->set_rules($config);
 
-			if ($id)
+			if ($ref)
 			{
-				$categorie=$this->Categorie_model->get($id);
+				$categorie=$this->Categorie_model->get($ref);
 			} 
 			
 			if ($this->form_validation->run()==FALSE)
 			{
 				$data['titre']='formulaire Categorie';
-				$data['hidden']=array('id_categorie'=>$id);
+				$data['hidden']=array('ref_categorie'=>$ref);
 				$data['inputs']=array();
 
 				array_push($data['inputs'], $this->input_field('intitule', isset($categorie)?$categorie:NULL));
@@ -52,9 +52,9 @@ class Categorie extends MY_Controller {
 					'intitule'=>$this->input->post('intitule'),
 					'description'=>$this->input->post('description')
 					);
-				if (isset($id)) $categorie['id_categorie']=$id;
+				if (isset($ref)) $categorie['ref_categorie']=$ref;
 				$this->Categorie_model->set($categorie);
-				redirect('/');
+				redirect('/categorie/liste');
 			}
 
 	}
@@ -65,7 +65,7 @@ class Categorie extends MY_Controller {
 			if (isset($id))
 			{
 				$this->Categorie_model->delete($id);
-				redirect('/');
+				redirect('/categorie/liste');
 			} 
 			
 	}
@@ -74,5 +74,21 @@ class Categorie extends MY_Controller {
 				$this->load->view('templates/header');
 				$this->load->view('templates/error');
 				$this->load->view('templates/footer');
+	}
+
+	public function liste()
+	{
+		$this->is_logged_in();
+		$data['liste']='';
+        $this->load->model('Categorie_model');
+		$categories=$this->Categorie_model->get();
+		foreach ($categories as $categorie) {
+			$data['liste'] .= $this->load->view('templates/box_categorie', $categorie, True);
+		}
+		$data['title']='Categorie';
+		$this->load->view('templates/header');
+		$this->load->view('templates/liste', $data);
+		$this->load->view('templates/footer');
+
 	}
 }

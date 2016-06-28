@@ -38,6 +38,18 @@
 <nav class="navbar navbar-default">
 	<a class="navbar-brand" href=<?php echo base_url("")?>>Bibliotheque</a>
 	<ul class="nav navbar-nav">
+	<li class='dropdown'>
+		  <a href="#" role="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+		    Liste <span class="caret"></span>
+		  </a>
+		  <ul class="dropdown-menu">
+		    <li><a href="<?php echo base_url('/auteur/liste')?>">Auteur</a></li>
+		    <li><a href="<?php echo base_url('/editeur/liste')?>">Editeur</a></li>
+		    <li><a href="<?php echo base_url('/categorie/liste')?>">Catégorie</a></li>
+		    <li><a href="<?php echo base_url('/livre/liste')?>">Livre</a></li>
+		    <li><a href="<?php echo base_url('/emprunteur/liste')?>">Emprunteur</a></li>
+		  </ul>
+		</li>
 		<li><a href="<?php echo base_url('/main/liste_tout')?>">Liste Données</a></li>
 	</ul>
 	<ul class="nav navbar-nav navbar-right">

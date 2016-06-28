@@ -51,7 +51,7 @@ class Editeur extends MY_Controller {
 					);
 				if (isset($ref_editeur)) $editeur['ref_editeur']=$ref_editeur;
 				$this->Editeur_model->set($editeur);
-				redirect('/');
+				redirect('/editeur/liste');
 			}
 
 	}
@@ -62,7 +62,7 @@ class Editeur extends MY_Controller {
 			if (isset($id_editeur))
 			{
 				$this->Editeur_model->delete($id_editeur);
-				redirect('/');
+				redirect('/editeur/liste');
 			} 
 			echo 'il n\'y a pas d\'editeur avec cette id.';
 			
@@ -72,5 +72,21 @@ class Editeur extends MY_Controller {
 				$this->load->view('templates/header');
 				$this->load->view('templates/error');
 				$this->load->view('templates/footer');
+	}
+
+	public function liste()
+	{
+		$this->is_logged_in();
+		$data['liste']='';
+        $this->load->model('Editeur_model');
+		$editeurs=$this->Editeur_model->get();
+		foreach ($editeurs as $editeur) {
+			$data['liste'] .= $this->load->view('templates/box_editeur', $editeur, True);
+		}
+		$data['title']='Editeur';
+		$this->load->view('templates/header');
+		$this->load->view('templates/liste', $data);
+		$this->load->view('templates/footer');
+
 	}
 }
