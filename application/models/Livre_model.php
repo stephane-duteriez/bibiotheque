@@ -82,15 +82,18 @@ class Livre_model extends MY_Model {
                                 'id_livre'=>$insert_id
                                 ));
                 }
+                return $data[$this->ref];
         }
 
         public function delete($ref)
         {
+                // check if there are elemenet from the table 'exemaplaire' link to this 'livre'
                 $this->db->select('*');
                 $this->db->from($this->table);
                 $this->db->join('EXEMPLAIRE', 'EXEMPLAIRE.'.$this->id . '=' . $this->table . '.' . $this->id);
                 $this->db->where($this->ref, $ref);
                 $query=$this->db->get();
+                // if there are elements found refuse to supprime the 'livre'.
                 if ($query->num_rows())
                 {
                         redirect('livre/error/supprime/'.$id);
@@ -99,6 +102,7 @@ class Livre_model extends MY_Model {
                         $id_livre=$this->db->get_where($this->table, array($this->ref=>$ref))->row()->id_livre;
                         if (isset($id_livre))
                         {
+                                // supprime the element from the table 'appartient' first.
                                 $this->db->delete('APPARTIENT', array($this->id=>$id_livre));
                                 $this->db->delete($this->table, array($this->id=>$id_livre));                                
                         }

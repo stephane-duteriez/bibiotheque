@@ -7,6 +7,10 @@
 			  	<div class="col-sm-6"><p>Auteur :</p></div>
 			  	<div class="col-sm-6"><p><?php echo $livre->nom . " " . $livre->prenom; ?></p></div>		    
 			  </div>
+			<div class="panel-body row">	
+			  	<div class="col-sm-6"><p>Serie :</p></div>
+			  	<div class="col-sm-6"><p><?php echo $livre->serie; ?></p></div>		    
+			  </div>
 			  <div class="panel-body row">
 			  	<div class="col-sm-6"><p>ISBN :</p></div>
 			  	<div class="col-sm-6"><p><?php echo $livre->ISBN ; ?></p></div>		    
@@ -19,6 +23,11 @@
 			  	<div class="col-sm-12"><p>Resumé :</p></div>
 			  	<div class="col-sm-12 well"><p><?php echo $livre->resume; ?></p></div>		    
 			  </div>
+			  <?php if ($livre->ref_image!='') :?>
+			  <div class="panel-body">
+			  		<img class="img-responsive  center-block" src="<?php echo base_url('/uploads/'.$livre->ref_image); ?>" height='200'>	    
+			  </div>
+			  <?php endif ?>
 			  <div class="panel-body row">
 			    <div class="col-sm-offset-5 col-sm-2">
 			      <button class="btn btn-default" onclick="window.location='<?php echo base_url('/livre/form/'.$livre->ref_livre);?>';" id="valider">Modifier</button>
@@ -84,6 +93,9 @@
 			    </div>
 		  	</div>	
 	</div>
+</div>
+<div class='centered'>
+
 </div>
 <script type="text/javascript">
 	function rendre(id_emprunt)
